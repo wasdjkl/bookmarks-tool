@@ -3,12 +3,14 @@
     <div class="control-panel">
       <button type="button" @click="handleLoadFromHtml">Load from HTML</button>
       <button type="button" @click="handleLoadCSV">Load from CSV</button>
+      <button type="button" @click="handleLoadJson">Load from JSON</button>
       <br />
       <button type="button" v-if="!show" @click="show = true">Show</button>
       <button type="button" v-if="show" @click="show = false">Hide</button>
       <br />
       <button type="button" @click="handleExportToCSV">Export to CSV</button>
       <button type="button" @click="handleExportToHtml">Export to HTML</button>
+      <button type="button" @click="handleExportToJson">Export to JSON</button>
       <br />
       <button type="button" @click="handleUniqByUrl">Uniq By Url</button>
       <button type="button" @click="handleFilterHTTPAndHTTPS">
@@ -58,6 +60,9 @@ export default {
     },
     handleLoadCSV() {
       this.loadFile(this.parseCSV, "text/csv");
+    },
+    handleLoadJson(){
+      this.loadFile(this.parseJSON,'application/json')
     },
     loadFile(parseFunction, fileType) {
       const fileSelector = document.createElement("input");
@@ -128,6 +133,9 @@ export default {
           });
         }
       );
+    },
+    parseJSON(content){
+      return content
     },
     getFolderPath(element) {
       const folderList = $(element).parent("DT").parents("DT");
@@ -216,6 +224,12 @@ export default {
         type: "text/html;charset=utf-8",
       });
       saveAs(blob, `bookmarks_${this.bookmarks.length}.html`);
+    },
+    handleExportToJson(){
+      const blob = new Blob([JSON.stringify(this.bookmarks)], {
+        type: "application/json;charset=utf-8",
+      });
+      saveAs(blob, `bookmarks_${this.bookmarks.length}.json`);
     },
     createBookmarkElement(bookmarksData) {
       console.log(bookmarksData);
